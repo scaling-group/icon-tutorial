@@ -1,0 +1,11 @@
+pe: "learned"
+data_mask: False
+tran: "custom"
+ff: True
+
+transformer:
+  n_layers: 6
+  n_heads: 8
+  model_dim: 256
+  widening_factor: 4
+

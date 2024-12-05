@@ -1,0 +1,4 @@
+amp: True
+amp_dtype: bf16
+compile: False
+sdpa_cudnn: True

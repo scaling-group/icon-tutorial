@@ -1,0 +1,7 @@
+train_data_files: "./scratch/data/data_weno_cubic/train*.h5"
+valid_data_files: "./scratch/data/data_weno_cubic/valid*.h5"
+
+kfeat: 'x'
+batch_size: 16
+num_workers: 4
+demo_num: 5

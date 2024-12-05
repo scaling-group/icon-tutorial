@@ -1,0 +1,35 @@
+
+name: icon
+channels:
+  - conda-forge
+  - pytorch
+  - defaults
+  - nvidia
+dependencies:
+  - python=3.11
+  - hydra-core
+  - omegaconf
+  - tabulate
+  - matplotlib
+  - numpy
+  - pandas
+  - pip
+  - pytorch=2.5.1
+  - pytorch-cuda=12.4
+  - torchvision
+  - torchaudio
+  - torchtriton
+  - torchinfo
+  - pytz
+  - h5py
+  - pip:
+    - wandb
+    - seaborn
+    - tqdm
+    - jax[cuda12]
+    - dm-haiku
+    - flax
+    - einshape
+    - jupyter
+    - scikit-learn
+    - datasets

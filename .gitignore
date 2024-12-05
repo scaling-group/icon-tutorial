@@ -1,0 +1,16 @@
+**/scratch
+**/.DS_Store
+**/*.pyc
+useless/*
+**/results*/*
+**/*log
+**/*checkpoints*/*
+**/*pickle
+**/*play*
+**/*pdf
+**/*png
+**/*pkl
+**/*.npy
+**/*.npz
+**/__pycache__/*
+**/*.h5

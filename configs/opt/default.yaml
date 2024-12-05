@@ -1,0 +1,6 @@
+peak_lr: 1e-4
+end_lr: 0
+warmup_percent: 10
+decay_percent: 100
+gnorm_clip: 1.0
+weight_decay: 1e-4

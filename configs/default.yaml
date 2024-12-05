@@ -1,0 +1,34 @@
+defaults:
+  - model: icon_lm_5m
+  - data: weno_all
+  - loss: icon_lm
+  - opt: default
+  - acc: aggress
+  - _self_
+  - override hydra/hydra_logging: none
+  - override hydra/job_logging: none
+
+
+seed: 42
+board: False
+total_steps: 1000000
+save_interval: 100000
+plot_interval: 100000
+time_interval: 10000
+print_interval: 1000
+
+time_warm_up: 100
+save_path: "./scratch/save/weno/"
+
+
+restore:
+  stamp: none
+  step: none
+
+wandb:
+  project: "icon-tutorial"
+
+hydra:  
+  output_subdir: null
+  run:  
+    dir: .
