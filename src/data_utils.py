@@ -147,6 +147,7 @@ class WenoDataset(Dataset):
 
         self.worker_rng = None  # Placeholder for worker-specific random number generator
         self.worker_id = None  # Placeholder for worker ID
+        self.file_handles = None # placeholder for file handles
 
         # Collecting a list of (file_path, group_name) for record indexing
         for file_path in self.file_paths:
@@ -157,6 +158,7 @@ class WenoDataset(Dataset):
     def set_worker_rng(self, worker_id, worker_rng):
         self.worker_id = worker_id
         self.worker_rng = worker_rng
+        self.file_handles = {}
         print(self.name, "Worker ID:", self.worker_id, "Worker Initial RNG Seed:", self.worker_rng.initial_seed(), flush=True)
         # make sure the worker_rng is unique for each worker
 
@@ -166,18 +168,20 @@ class WenoDataset(Dataset):
     def __getitem__(self, idx):
         file_path, group_name = self.indices[idx]
 
-        with h5py.File(file_path, 'r') as f:
-            group = f[group_name]
-            equation = group['equation'][()].decode('utf-8')
-            # make sure the random state is unique for each worker and each iteration
-            # the worker_id can be the same inside the same batch
-            random_state = f"{self.worker_id}_{torch.randint(100, (1,), generator=self.worker_rng).item()}"
-            equation = f"{equation}_{random_state}"
-            param = torch.tensor(group['param'][:], dtype=torch.float32)
-            cond_k = torch.tensor(group['cond_k'][:], dtype=torch.float32)
-            cond_v = torch.tensor(group['cond_v'][:], dtype=torch.float32)
-            qoi_k = torch.tensor(group['qoi_k'][:], dtype=torch.float32)
-            qoi_v = torch.tensor(group['qoi_v'][:], dtype=torch.float32)
+        if file_path not in self.file_handles:
+            self.file_handles[file_path] = h5py.File(file_path, 'r')
+
+        group = self.file_handles[file_path][group_name]
+        equation = group['equation'][()].decode('utf-8')
+        # make sure the random state is unique for each worker and each iteration
+        # the worker_id can be the same inside the same batch
+        random_state = f"{self.worker_id}_{torch.randint(100, (1,), generator=self.worker_rng).item()}"
+        equation = f"{equation}_{random_state}"
+        param = torch.tensor(group['param'][:], dtype=torch.float32)
+        cond_k = torch.tensor(group['cond_k'][:], dtype=torch.float32)
+        cond_v = torch.tensor(group['cond_v'][:], dtype=torch.float32)
+        qoi_k = torch.tensor(group['qoi_k'][:], dtype=torch.float32)
+        qoi_v = torch.tensor(group['qoi_v'][:], dtype=torch.float32)
         
         if self.cfg['kfeat'] == "sin":
             cond_k = torch.concat([torch.sin(2 * np.pi * cond_k), torch.cos(2 * np.pi * cond_k)], dim=-1)
@@ -210,6 +214,11 @@ class WenoDataset(Dataset):
                 demo_qoi_k, demo_qoi_v, demo_qoi_mask, \
                 quest_cond_k, quest_cond_v, quest_cond_mask, \
                 quest_qoi_k, quest_qoi_v, quest_qoi_mask
+
+    def __del__(self):
+        # Close all file handles when the dataset is deleted
+        for file_handle in self.file_handles.values():
+            file_handle.close()
 
 
 def worker_init_fn(worker_id):
