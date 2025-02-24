@@ -14,6 +14,7 @@ Please see [our website](https://scaling-group.github.io/research/) for latest u
 ## Run the code
 See scripts in `scripts` folder. Please navigate to the root folder of the project before running the scripts.
 
+Currently the code has errors when using multiple GPUs. It seems that the main issue is that the model takes as input a customized data type instead of tensors, which is not compatible with DataParallel. Will fix this in the future.
 
 ## Reference:
 

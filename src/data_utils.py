@@ -215,10 +215,6 @@ class WenoDataset(Dataset):
                 quest_cond_k, quest_cond_v, quest_cond_mask, \
                 quest_qoi_k, quest_qoi_v, quest_qoi_mask
 
-    def __del__(self):
-        # Close all file handles when the dataset is deleted
-        for file_handle in self.file_handles.values():
-            file_handle.close()
 
 
 def worker_init_fn(worker_id):
