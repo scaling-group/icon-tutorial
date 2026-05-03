@@ -6,6 +6,10 @@ The code is implemented using PyTorch and aims to provide a starting point for r
 
 Please see [our website](https://scaling-group.github.io/research/) for latest updates on ICON and other projects. 
 
+## New Repository
+
+🚀 Check out [**icon-core**](https://github.com/scaling-group/icon-core) on GitHub, the open-source infrastructure package for your ICON development, featuring built-in AI support, modular implementations, training pipelines, and examples to get you started.
+
 ## Environment
 
 `conda env create -f conda_env.yaml`
